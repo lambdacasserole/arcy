@@ -52,6 +52,9 @@ public class Rc4Cipher {
         }
     }
 
+    private int prga_i = 0;
+    private int prga_j = 0;
+
     /**
      * The pseudo-random generation algorithm fills a buffer array with a
      * pseudo-random key stream.
@@ -60,15 +63,14 @@ public class Rc4Cipher {
      */
     private void prga(int[] buffer) {
         // Fill buffer with pseudo-random key stream.
-        int i = 0;
-        int j = 0;
         for (int c = 0; c < buffer.length; c++) {
-            i = (i + 1) % 256;
-            j = (j + state[i]) % 256;
-            swap(i, j);
-            buffer[c] = state[(state[i] + state[j]) % 256];
+            prga_i = (prga_i + 1) % 256;
+            prga_j = (prga_j + state[prga_i]) % 256;
+            swap(prga_i, prga_j);
+            buffer[c] = state[(state[prga_i] + state[prga_j]) % 256];
         }
     }
+
 
     /**
      * Gets the key the algorithm is using to encrypt/decrypt data.
